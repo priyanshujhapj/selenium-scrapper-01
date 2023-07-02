@@ -82,7 +82,7 @@ def main(page, size):
     
 #   ### for chromedriver-py ###
     service = Service(binary_path)
-    driver = webdriver.Chrome(service=service, options=chrome_options)
+    driver = webdriver.Chrome(service=service)
 
     # # Set Chrome options
     # chrome_options = Options()
