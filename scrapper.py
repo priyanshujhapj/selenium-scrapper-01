@@ -78,7 +78,8 @@ def main(page, size):
 #   ### for get chromedriver ###
     get_driver = GetChromeDriver()
     get_driver.install()
-    driver = webdriver.Chrome()
+    print(os.listdir('/usr/bin/google-chrome'))
+    driver = webdriver.Chrome(executable_path='/usr/bin/google-chrome')
     
 #   ### for chromedriver-py ###
     # service = Service(binary_path)
