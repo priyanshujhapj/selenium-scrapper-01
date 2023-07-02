@@ -1,11 +1,13 @@
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.options import Options
+# from selenium.webdriver.chrome.service import Service
+# from selenium.webdriver.common.by import By
+# from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 import json
 import os
-import chromedriver_binary
+# import chromedriver_binary
+from get_chrome_driver import GetChromeDriver
+
 
 basic_url = "https://www.finnomena.com"
 
@@ -67,15 +69,22 @@ def dump_data(names, links, grouped_list, file_name):
 
 
 def main(page, size):
-    # Set up ChromeDriver path
-    chrome_driver_path = chromedriver_binary.chromedriver_filename
-    # Set Chrome options
-    chrome_options = Options()
-    chrome_options.add_argument('--headless')  # Run ChromeDriver in headless mode
+#   ### Chromedriver settings ###
 
-    # Create a new ChromeDriver instance
-    service = Service(chrome_driver_path)
-    driver = webdriver.Chrome(service=service, options=chrome_options)
+    # # Set up ChromeDriver path
+    # chrome_driver_path = chromedriver_binary.chromedriver_filename
+    # # Set Chrome options
+    # chrome_options = Options()
+    # chrome_options.add_argument('--headless')  # Run ChromeDriver in headless mode
+
+    # # Create a new ChromeDriver instance
+    # service = Service(chrome_driver_path)
+    # driver = webdriver.Chrome(service=service, options=chrome_options)
+
+    get_driver = GetChromeDriver()
+    get_driver.install()
+
+    driver = webdriver.Chrome()
 
     # Create new directory for output files
     os.mkdir('output')
