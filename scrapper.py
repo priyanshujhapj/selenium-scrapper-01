@@ -79,10 +79,11 @@ def main(page, size):
     try:
         get_driver = GetChromeDriver()
         get_driver.install()
-        driver = webdriver.Chrome(executable_path='/opt/render/project/src/google-chrome')
+        path = '/opt/render/project/src/google-chrome-stable_current_amd64'
+        driver = webdriver.Chrome(executable_path=path)
     except FileNotFoundError as e:
-        print('\n-------------->ls /opt/render/project/src/google-chrome')
-        print(os.listdir('/opt/render/project/src/google-chrome'))
+        print('\n-------------->ls /opt/render/project/src/google-chrome-stable_current_amd64')
+        print(os.listdir(path))
         pass
     except Exception as e:
         print(f'\n--------------> Unrecognized exception\n{e}')
