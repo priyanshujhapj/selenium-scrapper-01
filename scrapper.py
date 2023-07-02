@@ -76,10 +76,13 @@ def main(page, size):
     # chrome_driver_path = chromedriver_binary.chromedriver_filename
 
 #   ### for get chromedriver ###
+    try:
     get_driver = GetChromeDriver()
     get_driver.install()
-    print(os.listdir('/usr/bin/google-chrome'))
     driver = webdriver.Chrome(executable_path='/usr/bin/google-chrome')
+    except FileNotFoundError as e:
+    print('\n-------------->ls -la /usr/bin')
+    print(os.listdir('/usr/bin/'))
     
 #   ### for chromedriver-py ###
     # service = Service(binary_path)
