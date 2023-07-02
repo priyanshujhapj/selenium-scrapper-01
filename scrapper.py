@@ -5,6 +5,7 @@ from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 import json
 import os
+import chromedriver_binary
 
 basic_url = "https://www.finnomena.com"
 
@@ -67,7 +68,7 @@ def dump_data(names, links, grouped_list, file_name):
 
 def main(page, size):
     # Set up ChromeDriver path
-    chrome_driver_path = '/path/to/chromedriver'
+    # chrome_driver_path = '/path/to/chromedriver'
     # Set Chrome options
     chrome_options = Options()
     chrome_options.add_argument('--headless')  # Run ChromeDriver in headless mode
