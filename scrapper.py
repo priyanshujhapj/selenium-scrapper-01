@@ -77,13 +77,17 @@ def main(page, size):
 
 #   ### for get chromedriver ###
     try:
+        os.mkdir('/opt/render/project/src/google-chrome')
         get_driver = GetChromeDriver()
         get_driver.install()
-        driver = webdriver.Chrome(executable_path='/usr/bin/google-chrome')
+        driver = webdriver.Chrome(executable_path='/opt/render/project/src/google-chrome')
     except FileNotFoundError as e:
-        print('\n-------------->pwd')
-        # print(os.listdir('/usr/bin/'))
-        print(os.getcwd())
+        print('\n-------------->ls /opt/render/project/src')
+        print(os.listdir('/opt/render/project/src/'))
+        pass
+    except Exception as e:
+        print(f'\n--------------> Unrecognized exception\n{e}')
+        pass
     
 #   ### for chromedriver-py ###
     # service = Service(binary_path)
