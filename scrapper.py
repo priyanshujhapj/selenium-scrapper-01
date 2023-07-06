@@ -1,14 +1,12 @@
 from selenium import webdriver
-# from selenium.webdriver.chrome.service import Service
-# from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 import json
 import os
-# import chromedriver_binary
-# from get_chrome_driver import GetChromeDriver
-# from chromedriver_py import binary_path 
-
+import shutil
+import time
 
 basic_url = "https://www.finnomena.com"
 
@@ -68,70 +66,49 @@ def dump_data(names, links, grouped_list, file_name):
             print("This webpage had less than 100 entries")
             json.dump(items, fl, indent=2)
 
-
 def main(page, size):
-#   ### Chromedriver settings ###
-
-#   ### for chromedriver binary ###
-    # chrome_driver_path = chromedriver_binary.chromedriver_filename
-
-#   ### for get chromedriver ###
-    # path = '/opt/render/project/src/google-chrome-stable_current_amd64.deb'
-
-    # try:
-    #     get_driver = GetChromeDriver()
-    #     get_driver.install()
-    #     driver = webdriver.Chrome(executable_path=path)
-    # except FileNotFoundError as e:
-    #     print('\n-------------->ls /opt/render/project/src/google-chrome-stable_current_amd64.deb')
-    #     print(os.listdir(path))
-    #     print()
-    #     print(os.scandir(path))
-    #     pass
-    # except Exception as e:
-    #     print(f'\n--------------> Unrecognized exception\n{e}')
-    #     pass
-    
-#   ### for chromedriver-py ###
-    # service = Service(binary_path)
-    # driver = webdriver.Chrome(service=service)
-
-    # # Set Chrome options
+    # Set up ChromeDriver path
+    chrome_driver_path = '/path/to/chromedriver'
+    # chrome_driver_path = './chromedriver'
+    # Set Chrome options
     chrome_options = Options()
-    chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-    print(f'\n\Google chrome binary path-:\n{os.environ.get("GOOGLE_CHROME_BIN")}\n')
-    chrome_options.add_argument('--headless')
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-dev-sh-usage")
+    chrome_options.add_argument('--headless')  # Run ChromeDriver in headless mode
+    chrome_options.add_argument('--no-sandbox')
 
-    # # Create a new ChromeDriver instance
-    # service = Service(chrome_driver_path)
-    print(f'\nChromedriver path:- {os.environ.get("CHROMEDRIVER_PATH")}\n')
-    driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=chrome_options)
+    # Create a new ChromeDriver instance
+    service = Service(chrome_driver_path)
+    driver = webdriver.Chrome(service=service, options=chrome_options)
+    print('Starting browser')
+    time.sleep(5)
 
     # Create new directory for output files
-    os.mkdir('output')
+    try:
+        print('Creating directory names "output"')
+        os.mkdir('output')
+    except FileExistsError as e:
+        print('Directory "output" already exists\nRemove "output"')
+        shutil.rmtree('output')
+        print('Successfully removed "output"\nCreating "output" again')
+        os.mkdir('output')
 
-    for i in range(1, page+1):
-        url = f'https://www.finnomena.com/fund/filter?page={i}&size={size}'
-        driver.get(url)
-        print(f"Collecting data for:-\n PAGE: {i}\n SIZE: {size}")
-        print(f'Url looks like:- {url}')
-        # Get the page source after dynamic content has loaded
-        html = driver.page_source
-        soup = BeautifulSoup(html, 'html.parser')
-        table_sticky_div = soup.find("div", class_="table-sticky")
-        filter_table_div = soup.find("div", class_="filter-table")
-        # get data
-        names, links, grouped_list = get_data(table_sticky_div, filter_table_div)
-        # dump into json file
-        file_name = f'output/output{i}.json'
-        try:
-            dump_data(names, links, grouped_list, file_name)
-        except FileNotFoundError as e:
-            print('This is not valid file path.\nCreate directory named output on the same level as main.py fil')
-
+    url = f'https://www.finnomena.com/fund/filter?page={page}&size={size}'
+    print(f'Initializing request for url - {url}')
+    driver.get(url)
+    print(f"Collecting data for:-\n PAGE: {page}\n SIZE: {size}")
+    print(f'Url looks like:- {url}')
+    # Get the page source after dynamic content has loaded
+    html = driver.page_source
+    soup = BeautifulSoup(html, 'html.parser')
+    table_sticky_div = soup.find("div", class_="table-sticky")
+    filter_table_div = soup.find("div", class_="filter-table")
+    # get data
+    names, links, grouped_list = get_data(table_sticky_div, filter_table_div)
+    # dump into json file
+    file_name = f'output/output{page}.json'
+    try:
+        dump_data(names, links, grouped_list, file_name)
+    except FileNotFoundError as e:
+        print('This is not valid file path.\nCreate directory named output on the same level as main.py fil')
 
     # Close the browser
     driver.quit()
-

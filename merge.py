@@ -4,11 +4,17 @@ import json
 def merge_files(page):
     data = []
     print(f'Merging {page} objects')
-    for i in range(1, page+1):
-        entries = []
-        file_name = f'output/output{i}.json'
-        with open(file_name, encoding='utf-8') as fl:
-            entries = json.load(fl)
+    # for i in range(1, page+1):
+    #     entries = []
+    #     file_name = f'output/output{i}.json'
+    #     with open(file_name, encoding='utf-8') as fl:
+    #         entries = json.load(fl)
+    #     data.append(entries)
+
+    entries = []
+    file_name = f'output/output{page}.json'
+    with open(file_name, encoding='utf-8') as fl:
+        entries = json.load(fl)
         data.append(entries)
 
     modified = []
@@ -30,10 +36,16 @@ def merge_files(page):
     return json_object
 
 def clean(page):
+    # try:
+    #     for i in range(1, page+1):
+    #         print(f'Removing files:- output/output{i}.json')
+    #         os.remove(f'output/output{i}.json')
+    #     os.rmdir('output')
+    # except OSError as e:
+    #     print("Path not recognised or directory is not empty")
     try:
-        for i in range(1, page+1):
-            print(f'Removing files:- output/output{i}.json')
-            os.remove(f'output/output{i}.json')
+        print(f'Removing files:- output/output{page}.json')
+        os.remove(f'output/output{page}.json')
         os.rmdir('output')
     except OSError as e:
-        print("Path not recognised or directory is not empty")
+        print('Path not recognised')
