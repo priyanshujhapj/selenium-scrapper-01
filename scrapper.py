@@ -5,6 +5,7 @@ from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 import json
 import os
+import shutil
 # import chromedriver_binary
 # from get_chrome_driver import GetChromeDriver
 # from chromedriver_py import binary_path 
@@ -110,10 +111,18 @@ def main(page, size):
     driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=chrome_options)
 
     # Create new directory for output files
-    os.mkdir('output')
+    try:
+        print('Creating directory "output"')
+        os.mkdir('output')
+    except FileExistsError as e:
+        print('Directory named "output" already exists\nRemoving "output"')
+        shutil.rmtree('output')
+        print('Susscessfully removed\nCreating "output" again')
+        os.mkdir('output')
 
     for i in range(1, page+1):
         url = f'https://www.finnomena.com/fund/filter?page={i}&size={size}'
+        print(f'Initialising request for url - {url}')
         driver.get(url)
         print(f"Collecting data for:-\n PAGE: {i}\n SIZE: {size}")
         print(f'Url looks like:- {url}')

@@ -1,6 +1,8 @@
 from flask import Flask, request, Response
 from scrapper import main
 from merge import merge_files, clean
+import subprocess
+
 
 app = Flask(__name__)
 
@@ -27,4 +29,7 @@ def scrape_data():
         return f'Token not matched!'
 
 if __name__ == "__main__":
+    command = 'gunicorn app:app --workers 4 --bind 0.0.0.0:3000 --timeout 300'
+    server_process = subprocess.Popen(command, shell=True)
+    # app.run()
     app.run(host='0.0.0.0')
