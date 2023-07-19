@@ -12,7 +12,7 @@ docker build -t {name_of_image} .
 
 ### Running Dokcer container
 ```
-docker run -dp 3000:3000 --shm-size="2g" {name_of_image}
+docker run -p 3000:3000 {name_of_image}
 ```
 
 
