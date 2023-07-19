@@ -1,7 +1,5 @@
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.firefox.options import Options
 from bs4 import BeautifulSoup
 import json
 import os
@@ -67,17 +65,13 @@ def dump_data(names, links, grouped_list, file_name):
             json.dump(items, fl, indent=2)
 
 def main(page, size):
-    # Set up ChromeDriver path
-    chrome_driver_path = '/path/to/chromedriver'
-    # chrome_driver_path = './chromedriver'
-    # Set Chrome options
-    chrome_options = Options()
-    chrome_options.add_argument('--headless')  # Run ChromeDriver in headless mode
-    chrome_options.add_argument('--no-sandbox')
+    # Set options
+    options = Options()
+    options.add_argument('--headless')  
+    options.add_argument('--no-sandbox')
 
     # Create a new ChromeDriver instance
-    service = Service(chrome_driver_path)
-    driver = webdriver.Chrome(service=service, options=chrome_options)
+    driver = webdriver.Firefox(options=options)
     print('Starting browser')
     time.sleep(5)
 
